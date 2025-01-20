@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# Dependencias de paquetes
+package-lock.json
+yarn.lock
+
+# Archivos de configuración del IDE
+.vscode/
+.idea/
+
+# Archivos de entorno
+.env
+
+# Archivos generados
+dist/
+build/
+public/
+
+# Archivos de compilación de Tailwind CSS
+*.css.map
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de log
+*.log
+
+# Otros
+*.bak
+*.tmp
