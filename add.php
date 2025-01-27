@@ -1,12 +1,21 @@
 <?php
   require "database.php";
+  $error = null;
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $name = $_POST["name"];
-    $phoneNumber = $_POST["phone_number"];
+    if(empty($_POST["name"] || $_POST["phone_number"])) {
+      $error = "Please fill all the fields";
+    } else {
+      $name = $_POST["name"];
+      $phoneNumber = $_POST["phone_number"];
 
-    $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES ('$name','$phoneNumber')");
-    $stmt->execute();
-    header("Location: index.php");
+      $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES (:name,:phone_number)");
+      $stmt->bindParam(":name",$_POST["name"]);
+      $stms->bindParam(":phone_number", $_POST["phone_number"]);
+      $stmt->execute();
+
+      header("Location: index.php");
+    }
+    
   }
 ?>
 <!DOCTYPE html>
@@ -50,6 +59,11 @@
         <h3>Add new contact</h3>
       </div>
       <div>
+        <?php if ($error): ?>
+          <p class="text-sm text-red-500">
+            <?= $error ?>
+          </p>
+        <? endif ?>  
         <form method="POST" action="add.php"  class="my-6 max-w-full">
           <div class="flex items-center  mb-6">
             <div class="w-2/6">
