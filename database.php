@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";
-$database = "contacts_app";
+$database = "contact_app";
 $user = "root";
 $password = "";
 

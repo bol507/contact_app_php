@@ -1,3 +1,14 @@
+<?php
+  require "database.php";
+  if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $name = $_POST["name"];
+    $phoneNumber = $_POST["phone_number"];
+
+    $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES ('$name','$phoneNumber')");
+    $stmt->execute();
+    header("Location: index.php");
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,7 +50,7 @@
         <h3>Add new contact</h3>
       </div>
       <div>
-        <form action="" class="my-6 max-w-full">
+        <form method="POST" action="add.php"  class="my-6 max-w-full">
           <div class="flex items-center  mb-6">
             <div class="w-2/6">
               <label for="name" class="block text-right text-white font-bold pr-4 ">

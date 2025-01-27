@@ -1,3 +1,7 @@
+<?php
+require "database.php";
+$contacts = $conn->query("SELECT * FROM contacts");
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,40 +31,32 @@
             <a href="#" >Home</a>
           </li>
           <li class="block py-2 px-3 md:px-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-            <a href="./add.html" >Add contact</a>
+            <a href="./add.php" >Add contact</a>
           </li>
         </ul>
       </div>
     </nav>
 
     <main class="flex flex-col items-center mx-4 my-4 py-4 px-3  gap-x-4 md:flex-row">
-     
-        <div class="flex flex-col items-center md:w-6/12 lg:w-3/12 border rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-2">
-          <h3 class="text-xl font-medium text-gray-900 dark:text-white">Contact name 1</h3>
-          <p class="dark:text-white" >134456789</p>
-          <div class="flex mt-4 mb-2 gap-x-4 px-3">
-            <a href="#" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit contact</a>
-            <a href="#" class="bg-red-500 text-white px-4 py-2 rounded ">Delete contact</a>
+        <?php if($contacts->rowCount() == 0): ?>
+          <div>
+            <p>No contacts save yet</p>
+            <a href="add.php">Add one! </a>
           </div>
-        </div>
-        
-        <div class="flex flex-col items-center md:w-6/12 lg:w-3/12 border rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-2">
-          <h3 class="text-xl font-medium text-gray-900 dark:text-white">Contact name 1</h3>
-          <p class="dark:text-white">134456789</p>
-          <div class="flex mt-4 mb-2 gap-x-4 px-3">
-            <a href="#" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit contact</a>
-            <a href="#" class="bg-red-500 text-white px-4 py-2 rounded ">Delete contact</a>
-          </div>
-        </div>
+        <?php endif ?>  
 
+        <?php foreach($contacts as $contact): ?>
         <div class="flex flex-col items-center md:w-6/12 lg:w-3/12 border rounded-lg border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 mb-2">
-          <h3 class="text-xl font-medium text-gray-900 dark:text-white">Contact name 1</h3>
-          <p class="dark:text-white" >134456789</p>
+          <h3 class="text-xl font-medium text-gray-900 dark:text-white"><?= $contact["name"] ?></h3>
+          <p class="dark:text-white" ><?= $contact["phone_number"] ?></p>
           <div class="flex mt-4 mb-2 gap-x-4 px-3">
             <a href="#" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit contact</a>
             <a href="#" class="bg-red-500 text-white px-4 py-2 rounded ">Delete contact</a>
           </div>
         </div>
+        <?php endforeach ?>
+        
+       
 
     </main>
     <script src="./static/js/script.js"></script>
