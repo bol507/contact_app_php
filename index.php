@@ -50,7 +50,7 @@ $contacts = $conn->query("SELECT * FROM contacts");
           <h3 class="text-xl font-medium text-gray-900 dark:text-white"><?= $contact["name"] ?></h3>
           <p class="dark:text-white" ><?= $contact["phone_number"] ?></p>
           <div class="flex mt-4 mb-2 gap-x-4 px-3">
-            <a href="#" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit contact</a>
+            <a href="edit.php?id=<?= $contact['id'] ?>" class="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit contact</a>
             <a href="delete.php?id=<?= $contact['id'] ?>" class="bg-red-500 text-white px-4 py-2 rounded ">Delete contact</a>
           </div>
         </div>

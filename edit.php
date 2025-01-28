@@ -1,5 +1,19 @@
 <?php
 require "database.php";
+
+$id = $_GET["id"];
+
+$stmt = $conn->prepare("SELECT * FROM contacts WHERE id =:id LIMIT 1");
+$stmt->execute([":id" => $id]);
+
+if ($stmt->rowCount()== 0 ){
+    http_response_code(404);
+    echo(" HTTP 404 NOT FOUND");
+    return;
+}
+
+$contact = $stmt->fetch(PDO::FETCH_ASSOC);
+
 $error = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,10 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST["name"];
         $phoneNumber = $_POST["phone_number"];
 
-        $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES (:name, :phone_number)");
-        $stmt->bindParam(":name", $name);
-        $stmt->bindParam(":phone_number", $phoneNumber);
-        $stmt->execute();
+        $stmt = $conn->prepare("UPDATE contacts  SET name=:name, phone_number=:phone_number WHERE id=:id");
+        $stmt->execute([
+          ":id" => $id,
+          ":name" => $name,
+          ":phone_number" => $phoneNumber
+        ]);
+        
 
         header("Location: index.php");
         exit; 
@@ -64,9 +81,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-sm text-red-500">
             <?= $error ?>
           </p>
-        <? endif ?>  
-        <form method="POST" action="add.php"  class="my-6 max-w-full">
+        <?php endif ?>  
+        <form method="POST" action="edit.php?id=<?= $contact['id']  ?>"  class="my-6 max-w-full">
           <div class="flex items-center  mb-6">
+            
             <div class="w-2/6">
               <label for="name" class="block text-right text-white font-bold pr-4 ">
                 Name    
@@ -74,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <div class="w-3/6">
-              <input type="text" name="name" required autocomplete="name" class="w-full appearance-none rounded py-2 px-4 text-gray-700 focus:bg-white focus:border-gray-200 focus:outline-none">
+              <input value="<?= $contact['name']  ?>" type="text" name="name" required autocomplete="name" class="w-full appearance-none rounded py-2 px-4 text-gray-700 focus:bg-white focus:border-gray-200 focus:outline-none">
             </div>
             
           </div>
@@ -87,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             
             <div class="w-3/6">
-              <input type="text" name="phone_number" required autocomplete="phone_number" class="w-full appearance-none rounded py-2 px-4 text-gray-700 focus:bg-white focus:border-gray-200 focus:outline-none">
+              <input value="<?= $contact['phone_number']  ?>" type="text" name="phone_number" required autocomplete="phone_number" class="w-full appearance-none rounded py-2 px-4 text-gray-700 focus:bg-white focus:border-gray-200 focus:outline-none">
             </div>
           </div>
 
