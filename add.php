@@ -1,22 +1,23 @@
 <?php
-  require "database.php";
-  $error = null;
-  if($_SERVER["REQUEST_METHOD"] == "POST"){
-    if(empty($_POST["name"] || $_POST["phone_number"])) {
-      $error = "Please fill all the fields";
+require "database.php";
+$error = null;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (empty($_POST["name"]) || empty($_POST["phone_number"])) {
+        $error = "Please fill all the fields";
     } else {
-      $name = $_POST["name"];
-      $phoneNumber = $_POST["phone_number"];
+        $name = $_POST["name"];
+        $phoneNumber = $_POST["phone_number"];
 
-      $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES (:name,:phone_number)");
-      $stmt->bindParam(":name",$_POST["name"]);
-      $stms->bindParam(":phone_number", $_POST["phone_number"]);
-      $stmt->execute();
+        $stmt = $conn->prepare("INSERT INTO contacts (name, phone_number) VALUES (:name, :phone_number)");
+        $stmt->bindParam(":name", $name);
+        $stmt->bindParam(":phone_number", $phoneNumber);
+        $stmt->execute();
 
-      header("Location: index.php");
+        header("Location: index.php");
+        exit; 
     }
-    
-  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
