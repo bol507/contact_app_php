@@ -1,0 +1,5 @@
+.welcome {
+    background: url('/contact_app_php/static/img/background.jpg');
+    background-position: center center;
+    background-size: cover;
+}

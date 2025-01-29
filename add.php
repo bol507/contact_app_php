@@ -14,47 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(":phone_number", $phoneNumber);
         $stmt->execute();
 
-        header("Location: index.php");
+        header("Location: home.php");
         exit; 
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contacts App</title>
-    <!-- tailwindcss -->
-    <script defer src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="./static/css/style.css" />
-    
-  </head>
-  <body class="bg-slate-100 dark:bg-slate-800">
-
-    <nav class="flex items-center justify-between flex-wrap bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700 p-6">
-      <a href="#" class="flex items-center text-white font-bold">
-        <img src="./static/img/logo.png" alt="logo" class="w-5 h-5 mr-2" />
-        Contacts app
-      </a>
-      <div class="block lg:hidden">
-        <button  id="menu-toggle" class="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-        </button>
-      </div>
-      <div id="menu" class=" w-full md:block md:w-auto hidden">
-        <ul class="text-sm lg:flex-grow flex flex-col md:flex-row list-none bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-gray-700 font-medium rounded-lg md:space-x-8 md:mt-0 md:border-0 md:bg-transparent  ">
-          <li href="#" class="block py-2 px-3 md:px-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-            <a href="./index.php" >Home</a>
-          </li>
-          <li class="block py-2 px-3 md:px-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
-            <a href="./add.php" >Add contact</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main class="flex justify-center mx-4 my-4 py-4 px-3">
+<?php require "partials/header.php" ?>
+  <div class="flex justify-center ">
      <div class="w-8/12 border border-gray-200 dark:border-gray-700  dark:bg-gray-800 dark:hover:bg-gray-700">
       <div class="py-2 px-4  bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
         <h3>Add new contact</h3>
@@ -64,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <p class="text-sm text-red-500">
             <?= $error ?>
           </p>
-        <? endif ?>  
+        <?php endif ?>  
         <form method="POST" action="add.php"  class="my-6 max-w-full">
           <div class="flex items-center  mb-6">
             <div class="w-2/6">
@@ -105,7 +71,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 
      </div>
-    </main>
-    <script src="./static/js/script.js"></script>
-  </body>
-</html>
+  </div>        
+<?php require "partials/footer.php" ?>
