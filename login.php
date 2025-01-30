@@ -3,33 +3,27 @@ require "database.php";
 $error = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  if (empty($_POST["name"]) || empty($_POST["email"])   || empty($_POST["password"])){
+  if (empty($_POST["email"])   || empty($_POST["password"])){
     $error = "Please fill all fields.";
   } elseif (!str_contains($_POST["email"],"@")){
     $error = "Email format is incorrect.";
   } else {
-    $stmt = $conn->prepare("SELECT * FROM users where email = :email");
+    $stmt = $conn->prepare("SELECT * FROM users where email = :email LIMIT 1");
     $stmt->bindParam(":email",$_POST["email"]);
     $stmt->execute();
-    if($stmt->rowCount() > 0 ){
-      $error = "This email is taken.";
+    if($stmt->rowCount() == 0 ){
+      $error = "Invalid credentials.";
     }else {
-      $conn->prepare("INSERT INTO users (name,email,password) VALUES (:name,:email,:password)")
-      ->execute([
-        ":name"=> $_POST["name"],
-        ":email"=> $_POST["email"],
-        ":password"=> password_hash($_POST["password"], PASSWORD_BCRYPT)
-      ]);
-
-      $stmt = $conn->prepare("SELECT * FROM users where email = :email LIMIT 1");
-      $stmt->bindParam(":email",$_POST["email"]);
-      $stmt->execute();
       $user = $stmt->fetch(PDO::FETCH_ASSOC);
-      session_start();
-      unset($user["password"]);
-      $_SESSION["user"] = $user;
-
-      header("Location: home.php");
+      if(!password_verify($_POST["password"], $user["password"])){
+        $error = "Invalid credentials.";
+      } else {
+        session_start();
+        unset($user["password"]);
+        $_SESSION["user"] = $user;
+        header("Location: home.php");
+      }
+      
     }
 
   }
@@ -39,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="flex justify-center ">
      <div class="w-8/12 border border-gray-200 dark:border-gray-700  dark:bg-gray-800 dark:hover:bg-gray-700">
       <div class="py-2 px-4  bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
-        <h3>Register</h3>
+        <h3>Login</h3>
       </div>
       <div>
         <?php if ($error): ?>
@@ -47,19 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?= $error ?>
           </p>
         <?php endif ?>  
-        <form method="POST" action="register.php"  class="my-6 max-w-full">
-          <div class="flex items-center  mb-6">
-            <div class="w-2/6">
-              <label for="name" class="block text-right text-white font-bold pr-4 ">
-                Name    
-              </label>
-            </div>
-            
-            <div class="w-3/6">
-              <input type="text" name="name" required autocomplete="name" class="w-full appearance-none rounded py-2 px-4 text-gray-700 focus:bg-white focus:border-gray-200 focus:outline-none">
-            </div>
-            
-          </div>
+        <form method="POST" action="login.php"  class="my-6 max-w-full">
+          
 
           <div class="flex items-center mb-6">
             <div class="w-2/6">
